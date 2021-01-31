@@ -42,11 +42,6 @@ class App extends Component {
   };
 
   togglePersonsHandler = () => {
-    const rnd = Math.random();
-    console.log(rnd);
-    if (rnd > 0.7) {
-      throw new Error("Something went wrong");
-    }
     const doesShow = this.state.showPersons;
     this.setState({ showPersons: !doesShow });
   };
@@ -60,7 +55,6 @@ class App extends Component {
         <div>
           {this.state.persons.map((person, index) => {
             return (
-              <ErrorBoundary key={person.id}>
                 <Person
                   click={() => this.deletePersonHandler(index)}
                   name={person.name}
@@ -68,7 +62,6 @@ class App extends Component {
                   key={person.id}
                   changed={(event) => this.nameChangedHandler(event, person.id)}
                 />
-              </ErrorBoundary>
             );
           })}
         </div>
