@@ -17,6 +17,7 @@ class App extends Component {
     showPersons: false,
     showCockpit: true,
     changeCounter: 0,
+    authenticated: false,
   };
 
   static getDrivedStateFromProps(props, state) {
@@ -37,6 +38,10 @@ class App extends Component {
     console.log("[App.js] componentDidUpdate");
   }
 
+  loginHandler = () => {
+    this.setState({ authenticated: true });
+  };
+
   nameChangedHandler = (event, id) => {
     const personIndex = this.state.persons.findIndex((p) => {
       return p.id === id;
@@ -53,11 +58,11 @@ class App extends Component {
     const persons = [...this.state.persons];
     persons[personIndex] = person;
 
-    this.setState((prevState, props)=>{
+    this.setState((prevState, props) => {
       return {
         persons: persons,
         changeCounter: prevState.changeCounter + 1,
-      }
+      };
     });
   };
 
@@ -83,6 +88,7 @@ class App extends Component {
             clicked={this.deletePersonHandler}
             changed={this.nameChangedHandler}
             persons={this.state.persons}
+            isAuthenticated={this.state.authenticated}
           />
         </div>
       );
@@ -105,6 +111,7 @@ class App extends Component {
             personsLength={this.state.persons.length}
             showPersons={this.state.showPersons}
             clicked={this.togglePersonsHandler}
+            login={this.loginHandler}
           />
         ) : null}
         {persons}
