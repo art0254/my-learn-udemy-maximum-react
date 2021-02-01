@@ -1,25 +1,28 @@
 import React, { Component } from "react";
 import Person from "./Person/Person";
 class Persons extends Component {
-  static getDerivedStateFromProps(props, state){
-    console.log('[Persons.js] getDerivedStateFromProps');
+  static getDerivedStateFromProps(props, state) {
+    console.log("[Persons.js] getDerivedStateFromProps");
     return state;
   }
 
-  shouldComponentUpdate(nextProps, nextState){
-    console.log('[Persons.js] shouldComponentUpdate ');
+  shouldComponentUpdate(nextProps, nextState) {
+    console.log("[Persons.js] shouldComponentUpdate ");
     return true;
   }
 
-  getSnapshotBeforeUpdate(prevProps, prevState  ){
-    console.log('[Persons.js] getSnapshotBeforeUpdate');
-    return {message: 'Snapshot!'};
+  getSnapshotBeforeUpdate(prevProps, prevState) {
+    console.log("[Persons.js] getSnapshotBeforeUpdate");
+    return { message: "Snapshot!" };
   }
 
-  componentDidUpdate(prevProps, prevState, snapshot){
-    console.log('[Persons.js] ComponentDidUpdate', snapshot);
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    console.log("[Persons.js] ComponentDidUpdate", snapshot);
   }
 
+  componentWillUnmount() {
+    console.log("[Persons.js] componentWillUnmount");
+  }
 
   render() {
     return this.props.persons.map((person, index) => {
