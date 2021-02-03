@@ -76,6 +76,9 @@ class BurgetBuilder extends Component {
   purchaseCancelHandler = () => {
     this.setState({ purchasing: false });
   };
+  purchaseContinueHandler = () => {
+    alert('You Continue!');
+  };
   render() {
     const disabledInfo = {
       ...this.state.ingreditents,
@@ -86,7 +89,10 @@ class BurgetBuilder extends Component {
     return (
       <Aux>
         <Modal show={this.state.purchasing} modalClosed={this.purchaseCancelHandler}>
-          <OrderSummary ingredients={this.state.ingreditents} />
+          <OrderSummary ingredients={this.state.ingreditents}
+            purchaseCancelled={this.purchaseCancelHandler}
+            purchaseContinue={this.purchaseContinueHandler}
+          />
         </Modal>
         <Burger ingreditents={this.state.ingreditents} />
         <BurgerControl
