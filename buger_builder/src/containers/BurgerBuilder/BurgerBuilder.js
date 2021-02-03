@@ -92,6 +92,7 @@ class BurgetBuilder extends Component {
           <OrderSummary ingredients={this.state.ingreditents}
             purchaseCancelled={this.purchaseCancelHandler}
             purchaseContinue={this.purchaseContinueHandler}
+            price= {this.state.totalPrice}
           />
         </Modal>
         <Burger ingreditents={this.state.ingreditents} />
