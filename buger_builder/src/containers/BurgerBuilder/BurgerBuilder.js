@@ -23,7 +23,7 @@ class BurgetBuilder extends Component {
     const oldCount = this.state.ingreditents[type];
     const updateCount = oldCount + 1;
     const updatedIngreditents = {
-      ...this.state.ingreditents
+      ...this.state.ingreditents,
     };
     updatedIngreditents[type] = updateCount;
     const priceAddition = INGREDIENT_PRICES[type];
@@ -31,15 +31,41 @@ class BurgetBuilder extends Component {
     const newPrice = oldPrice + priceAddition;
     this.setState({
       totalPrice: newPrice,
-      ingreditents: updatedIngreditents
+      ingreditents: updatedIngreditents,
     });
-  } 
+  };
+  removeIngredientHandler = (type) => {
+    const oldCount = this.state.ingreditents[type];
+    if (oldCount <= 0) return;
+    const updateCount = oldCount - 1;
+    const updatedIngreditents = {
+      ...this.state.ingreditents,
+    };
+    updatedIngreditents[type] = updateCount;
+    const priceAddition = INGREDIENT_PRICES[type];
+    const oldPrice = this.state.totalPrice;
+    const newPrice = oldPrice - priceAddition;
+    this.setState({
+      totalPrice: newPrice,
+      ingreditents: updatedIngreditents,
+    });
+  };
 
   render() {
+    const disabledInfo = {
+      ...this.state.ingreditents,
+    };
+    for (let key in disabledInfo) {
+      disabledInfo[key] = disabledInfo[key] <= 0;
+    }
     return (
       <Aux>
         <Burger ingreditents={this.state.ingreditents} />
-        <BurgerControl ingreditentAdded = {this.addIngredientHandler}/>
+        <BurgerControl
+          ingreditentAdded={this.addIngredientHandler}
+          ingreditentRemoved={this.removeIngredientHandler}
+          disabled={disabledInfo}
+        />
       </Aux>
     );
   }
