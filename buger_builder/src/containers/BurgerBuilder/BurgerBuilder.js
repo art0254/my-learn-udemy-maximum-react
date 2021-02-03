@@ -20,6 +20,7 @@ class BurgetBuilder extends Component {
     },
     totalPrice: 4,
     purchasable: false,
+    purchasing: false,
   };
 
   updatePurchaseState(ingreditents) {
@@ -69,7 +70,9 @@ class BurgetBuilder extends Component {
     });
     this.updatePurchaseState(updatedIngreditents);
   };
-
+  purchaseHandler = () => {
+    this.setState({ purchasing: true });
+  };
   render() {
     const disabledInfo = {
       ...this.state.ingreditents,
@@ -79,8 +82,8 @@ class BurgetBuilder extends Component {
     }
     return (
       <Aux>
-        <Modal>
-          <OrderSummary ingredients={this.state.ingreditents}/>
+        <Modal show={this.state.purchasing}>
+          <OrderSummary ingredients={this.state.ingreditents} />
         </Modal>
         <Burger ingreditents={this.state.ingreditents} />
         <BurgerControl
@@ -89,6 +92,7 @@ class BurgetBuilder extends Component {
           ingreditentRemoved={this.removeIngredientHandler}
           purchasable={this.state.purchasable}
           disabled={disabledInfo}
+          ordered={this.purchaseHandler}
         />
       </Aux>
     );
