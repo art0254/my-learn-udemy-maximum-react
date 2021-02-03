@@ -17,8 +17,23 @@ class BurgetBuilder extends Component {
       meat: 0,
     },
     totalPrice: 4,
+    purchasable: false,
   };
 
+  updatePurchaseState(ingreditents) {
+    // const ingreditents = {
+    //   ...this.state.ingreditents,
+    // };
+    const sum = Object.keys(ingreditents)
+      .map((igKey) => {
+        return ingreditents[igKey];
+      })
+      .reduce((sum, el) => {
+        return sum + el;
+      }, 0);
+
+    this.setState({ purchasable: sum > 0 });
+  }
   addIngredientHandler = (type) => {
     const oldCount = this.state.ingreditents[type];
     const updateCount = oldCount + 1;
@@ -33,6 +48,7 @@ class BurgetBuilder extends Component {
       totalPrice: newPrice,
       ingreditents: updatedIngreditents,
     });
+    this.updatePurchaseState(updatedIngreditents);
   };
   removeIngredientHandler = (type) => {
     const oldCount = this.state.ingreditents[type];
@@ -49,6 +65,7 @@ class BurgetBuilder extends Component {
       totalPrice: newPrice,
       ingreditents: updatedIngreditents,
     });
+    this.updatePurchaseState(updatedIngreditents);
   };
 
   render() {
@@ -65,6 +82,7 @@ class BurgetBuilder extends Component {
           price={this.state.totalPrice}
           ingreditentAdded={this.addIngredientHandler}
           ingreditentRemoved={this.removeIngredientHandler}
+          purchasable={this.state.purchasable}
           disabled={disabledInfo}
         />
       </Aux>
