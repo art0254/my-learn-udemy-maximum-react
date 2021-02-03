@@ -62,6 +62,7 @@ class BurgetBuilder extends Component {
       <Aux>
         <Burger ingreditents={this.state.ingreditents} />
         <BurgerControl
+          price={this.state.totalPrice}
           ingreditentAdded={this.addIngredientHandler}
           ingreditentRemoved={this.removeIngredientHandler}
           disabled={disabledInfo}
