@@ -21,6 +21,7 @@ class BurgetBuilder extends Component {
     totalPrice: 4,
     purchasable: false,
     purchasing: false,
+    loading: false
   };
 
   updatePurchaseState(ingreditents) {
