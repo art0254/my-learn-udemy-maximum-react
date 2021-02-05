@@ -5,7 +5,8 @@ import { BrowserRouter } from "react-router-dom";
 class App extends Component {
   render() {
     return (
-      <BrowserRouter>
+      // <BrowserRouter basename="my-app">
+      <BrowserRouter basename="my-app">
         <div className="App">
           <Blog />
         </div>
