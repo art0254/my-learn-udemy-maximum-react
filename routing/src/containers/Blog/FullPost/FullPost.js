@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import axios from "../../../axios";
+import { Redirect } from "react-router-dom";
 import "./FullPost.css";
 
 class FullPost extends Component {
@@ -17,7 +18,8 @@ class FullPost extends Component {
     if (this.props.match.params.id) {
       if (
         !this.state.loadedPost ||
-        (this.state.loadedPost && this.props.match.params.id != this.state.loadedPost.id)
+        (this.state.loadedPost &&
+          this.props.match.params.id != this.state.loadedPost.id)
       ) {
         //console.log(this.props.match.params.id+""+""+this.state.loadedPost.id);
         axios.get("/posts/" + this.props.match.params.id).then((response) => {
