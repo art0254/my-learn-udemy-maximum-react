@@ -6,6 +6,7 @@ import Modal from "../../components/UI/Modal/Modal";
 import OrderSummary from "../../components/Burger/OrderSummary/OrderSummary";
 import axios from "../../axios-orders";
 import Spinner from "../../components/UI/Spinner/Spinner";
+import withErrorHandler from "../../hoc/withErrorHandler/withErrorHandler";
 const INGREDIENT_PRICES = {
   salad: 0.5,
   cheese: 0.4,
@@ -81,7 +82,7 @@ class BurgetBuilder extends Component {
   };
   purchaseContinueHandler = () => {
     //  alert("You Continue!");
-    this.setState({ loading: true});
+    this.setState({ loading: true });
     const order = {
       ingredients: this.state.ingreditents,
       price: this.state.totalPrice,
@@ -145,4 +146,4 @@ class BurgetBuilder extends Component {
   }
 }
 
-export default BurgetBuilder;
+export default withErrorHandler(BurgetBuilder, axios);
