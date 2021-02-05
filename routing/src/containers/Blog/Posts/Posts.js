@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import axios from "../../../axios";
 import Post from "../../../components/Post/Post";
-import { Link } from "react-router-dom";
+import { Route, NavLink, Switch } from "react-router-dom";
+import FullPost from "../FullPost/FullPost";
 import "./Post.css";
 class Posts extends Component {
   state = {
@@ -48,7 +49,13 @@ class Posts extends Component {
         );
       });
     }
-    return <section className="Posts">{posts}</section>;
+    return (
+      <div>
+        <section className="Posts">{posts}</section>
+        <Route path="/posts/:id" component={FullPost} exact />
+
+      </div>
+    );
   }
 }
 
