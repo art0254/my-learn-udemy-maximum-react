@@ -15,18 +15,23 @@ const INGREDIENT_PRICES = {
 };
 class BurgetBuilder extends Component {
   state = {
-    ingreditents: {
-      salad: 0,
-      bacon: 0,
-      cheese: 0,
-      meat: 0,
-    },
+    ingreditents: null,
     totalPrice: 4,
     purchasable: false,
     purchasing: false,
     loading: false,
+    error: null,
   };
-
+  componentDidMount() {
+    axios
+      .get("/ingreditents.json")
+      .then((response) => {
+        this.setState({ ingreditents: response.data });
+      })
+      .catch((error) => {
+        this.setState({ error: true });
+      });
+  }
   updatePurchaseState(ingreditents) {
     // const ingreditents = {
     //   ...this.state.ingreditents,
@@ -113,17 +118,40 @@ class BurgetBuilder extends Component {
     for (let key in disabledInfo) {
       disabledInfo[key] = disabledInfo[key] <= 0;
     }
-    let orderSummary = (
-      <OrderSummary
-        ingredients={this.state.ingreditents}
-        purchaseCancelled={this.purchaseCancelHandler}
-        purchaseContinue={this.purchaseContinueHandler}
-        price={this.state.totalPrice}
-      />
-    );
+    let orderSummary = null;
     if (this.state.loading) {
       orderSummary = <Spinner />;
     }
+    let burger = this.state.error ? (
+      <p>Ingredients can't be loaded</p>
+    ) : (
+      <Spinner />
+    );
+
+    if (this.state.ingreditents) {
+      burger = (
+        <Aux>
+          <Burger ingreditents={this.state.ingreditents} />
+          <BurgerControl
+            price={this.state.totalPrice}
+            ingreditentAdded={this.addIngredientHandler}
+            ingreditentRemoved={this.removeIngredientHandler}
+            purchasable={this.state.purchasable}
+            disabled={disabledInfo}
+            ordered={this.purchaseHandler}
+          />
+        </Aux>
+      );
+      orderSummary = (
+        <OrderSummary
+          ingredients={this.state.ingreditents}
+          purchaseCancelled={this.purchaseCancelHandler}
+          purchaseContinue={this.purchaseContinueHandler}
+          price={this.state.totalPrice}
+        />
+      );
+    }
+
     return (
       <Aux>
         <Modal
@@ -132,15 +160,7 @@ class BurgetBuilder extends Component {
         >
           {orderSummary}
         </Modal>
-        <Burger ingreditents={this.state.ingreditents} />
-        <BurgerControl
-          price={this.state.totalPrice}
-          ingreditentAdded={this.addIngredientHandler}
-          ingreditentRemoved={this.removeIngredientHandler}
-          purchasable={this.state.purchasable}
-          disabled={disabledInfo}
-          ordered={this.purchaseHandler}
-        />
+        {burger}
       </Aux>
     );
   }
