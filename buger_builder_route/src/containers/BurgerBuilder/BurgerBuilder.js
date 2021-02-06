@@ -86,30 +86,6 @@ class BurgetBuilder extends Component {
     this.setState({ purchasing: false });
   };
   purchaseContinueHandler = () => {
-    //  alert("You Continue!");
-    // this.setState({ loading: true });
-    // const order = {
-    //   ingredients: this.state.ingreditents,
-    //   price: this.state.totalPrice,
-    //   customer: {
-    //     name: "Nattapon Suetrong",
-    //     address: {
-    //       street: "000",
-    //       zipcode: "70000",
-    //       country: "Thailand",
-    //     },
-    //     email: "nana.ort@gmail.com",
-    //   },
-    //   deliveryMethod: "fastest",
-    // };
-    // axios
-    //   .post("/order.json", order)
-    //   .then((response) => {
-    //     this.setState({ loading: false, purchasing: false });
-    //   })
-    //   .catch((err) => {
-    //     this.setState({ loading: false, purchasing: false });
-    //   });
     const queryParams = [];
     for (let i in this.state.ingreditents) {
       queryParams.push(
@@ -118,10 +94,11 @@ class BurgetBuilder extends Component {
           encodeURIComponent(this.state.ingreditents[i])
       );
     }
+    queryParams.push("price=" + this.state.totalPrice);
     const queryString = queryParams.join("&");
     this.props.history.push({
       pathname: "/checkout",
-      search: queryString,
+      search: "?" + queryString,
     });
   };
   render() {
