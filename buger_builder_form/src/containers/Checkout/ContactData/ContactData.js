@@ -118,6 +118,7 @@ class ContactData extends Component {
     if (rules.maxLength) {
       isValid = value.length <= rules.maxLength && isValid;
     }
+    console.log(isValid);
     return isValid;
   }
 
@@ -153,6 +154,8 @@ class ContactData extends Component {
             elementType={formElement.config.elementType}
             elementConfig={formElement.config.elementConfig}
             value={formElement.config.value}
+            invalid={!formElement.config.isValid}
+            shouldValidate={formElement.config.validation}
             changed={(event) => {
               this.inputChangedHandler(event, formElement.id);
             }}
