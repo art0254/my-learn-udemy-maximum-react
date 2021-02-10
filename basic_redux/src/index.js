@@ -8,7 +8,7 @@ import registerServiceWorker from "./registerServiceWorker";
 import reducer from "./store/reducer";
 const store = createStore(reducer);
 ReactDOM.render(
-  <Provider>
+  <Provider store={store}>
     <App />
   </Provider>,
   document.getElementById("root")
