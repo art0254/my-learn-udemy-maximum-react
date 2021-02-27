@@ -1,8 +1,9 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import CounterControl from "../../components/CounterControl/CounterControl";
-import CounterOutput from "../../components/CounterOutput/CounterOutput";
-import * as actionTypes from "../../store/actions";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import * as actionCreators from '../../store/actions/actions';
+import CounterControl from '../../components/CounterControl/CounterControl';
+import CounterOutput from '../../components/CounterOutput/CounterOutput';
+import * as actionTypes from '../../store/actions/actions';
 class Counter extends Component {
   state = {
     counter: 0,
@@ -10,22 +11,22 @@ class Counter extends Component {
 
   counterChangedHandler = (action, value) => {
     switch (action) {
-      case "inc":
+      case 'inc':
         this.setState((prevState) => {
           return { counter: prevState.counter + 1 };
         });
         break;
-      case "dec":
+      case 'dec':
         this.setState((prevState) => {
           return { counter: prevState.counter - 1 };
         });
         break;
-      case "add":
+      case 'add':
         this.setState((prevState) => {
           return { counter: prevState.counter + value };
         });
         break;
-      case "sub":
+      case 'sub':
         this.setState((prevState) => {
           return { counter: prevState.counter - value };
         });
@@ -77,14 +78,12 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onIncrementCounter: () => dispatch({ type: actionTypes.INCREMENT }),
-    onDecrementCounter: () => dispatch({ type: actionTypes.DECREMENT }),
-    onAddCounter: () => dispatch({ type: actionTypes.ADD, val: 5 }),
-    onSubtractCounter: () => dispatch({ type: actionTypes.SUBTRACT, val: 5 }),
-    onDeleteResult: (id) =>
-      dispatch({ type: actionTypes.DELETE_RESULT, resultElId: id }),
-    onStoreResult: (result) =>
-      dispatch({ type: actionTypes.STORE_RESULT, result: result }),
+    onIncrementCounter: () => dispatch(actionCreators.increment()),
+    onDecrementCounter: () => dispatch(actionCreators.decrement()),
+    onAddCounter: () => dispatch(actionCreators.add(5)),
+    onSubtractCounter: () => dispatch(actionCreators.subtract(5)),
+    onDeleteResult: (id) => dispatch(actionCreators.deleteResult(id)),
+    onStoreResult: (result) => dispatch(actionCreators.storeResult(result)),
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Counter);
