@@ -12,8 +12,6 @@ import * as actionTypes from '../../store/actions';
 
 class BurgetBuilder extends Component {
   state = {
-    totalPrice: 4,
-    purchasable: false,
     purchasing: false,
     loading: false,
     error: null,
@@ -30,9 +28,6 @@ class BurgetBuilder extends Component {
       */
   }
   updatePurchaseState(ingreditents) {
-    // const ingreditents = {
-    //   ...this.state.ingreditents,
-    // };
     const sum = Object.keys(ingreditents)
       .map((igKey) => {
         return ingreditents[igKey];
@@ -41,7 +36,7 @@ class BurgetBuilder extends Component {
         return sum + el;
       }, 0);
 
-    this.setState({ purchasable: sum > 0 });
+    return sum > 0;
   }
 
   purchaseHandler = () => {
@@ -91,7 +86,7 @@ class BurgetBuilder extends Component {
             price={this.props.price}
             ingreditentAdded={this.props.onIngredientAdded}
             ingreditentRemoved={this.props.onIngredientRemove}
-            purchasable={this.state.purchasable}
+            purchasable={this.updatePurchaseState(this.props.ings)}
             disabled={disabledInfo}
             ordered={this.purchaseHandler}
           />
