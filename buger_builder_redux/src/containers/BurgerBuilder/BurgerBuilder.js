@@ -46,19 +46,8 @@ class BurgetBuilder extends Component {
     this.setState({ purchasing: false });
   };
   purchaseContinueHandler = () => {
-    const queryParams = [];
-    for (let i in this.state.ingreditents) {
-      queryParams.push(
-        encodeURIComponent(i) +
-          '=' +
-          encodeURIComponent(this.state.ingreditents[i])
-      );
-    }
-    queryParams.push('price=' + this.state.totalPrice);
-    const queryString = queryParams.join('&');
     this.props.history.push({
       pathname: '/checkout',
-      search: '?' + queryString,
     });
   };
   render() {
