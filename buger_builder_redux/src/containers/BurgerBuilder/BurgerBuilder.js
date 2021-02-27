@@ -1,21 +1,17 @@
-import React, { Component } from "react";
-import Aux from "../../hoc/Auxiliary/Auxiliary";
-import Burger from "../../components/Burger/Burger";
-import BurgerControl from "../../components/Burger/BuildControls/BuildControls";
-import Modal from "../../components/UI/Modal/Modal";
-import OrderSummary from "../../components/Burger/OrderSummary/OrderSummary";
-import axios from "../../axios-orders";
-import Spinner from "../../components/UI/Spinner/Spinner";
-import withErrorHandler from "../../hoc/withErrorHandler/withErrorHandler";
-const INGREDIENT_PRICES = {
-  salad: 0.5,
-  cheese: 0.4,
-  meat: 1.3,
-  bacon: 0.7,
-};
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import Aux from '../../hoc/Auxiliary/Auxiliary';
+import Burger from '../../components/Burger/Burger';
+import BurgerControl from '../../components/Burger/BuildControls/BuildControls';
+import Modal from '../../components/UI/Modal/Modal';
+import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
+import axios from '../../axios-orders';
+import Spinner from '../../components/UI/Spinner/Spinner';
+import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
+import * as actionTypes from '../../store/actions';
+
 class BurgetBuilder extends Component {
   state = {
-    ingreditents: null,
     totalPrice: 4,
     purchasable: false,
     purchasing: false,
@@ -23,7 +19,7 @@ class BurgetBuilder extends Component {
     error: null,
   };
   componentDidMount() {
-    axios
+    /* axios
       .get("/ingreditents.json")
       .then((response) => {
         this.setState({ ingreditents: response.data });
@@ -31,6 +27,7 @@ class BurgetBuilder extends Component {
       .catch((error) => {
         this.setState({ error: true });
       });
+      */
   }
   updatePurchaseState(ingreditents) {
     // const ingreditents = {
@@ -46,39 +43,7 @@ class BurgetBuilder extends Component {
 
     this.setState({ purchasable: sum > 0 });
   }
-  addIngredientHandler = (type) => {
-    const oldCount = this.state.ingreditents[type];
-    const updateCount = oldCount + 1;
-    const updatedIngreditents = {
-      ...this.state.ingreditents,
-    };
-    updatedIngreditents[type] = updateCount;
-    const priceAddition = INGREDIENT_PRICES[type];
-    const oldPrice = this.state.totalPrice;
-    const newPrice = oldPrice + priceAddition;
-    this.setState({
-      totalPrice: newPrice,
-      ingreditents: updatedIngreditents,
-    });
-    this.updatePurchaseState(updatedIngreditents);
-  };
-  removeIngredientHandler = (type) => {
-    const oldCount = this.state.ingreditents[type];
-    if (oldCount <= 0) return;
-    const updateCount = oldCount - 1;
-    const updatedIngreditents = {
-      ...this.state.ingreditents,
-    };
-    updatedIngreditents[type] = updateCount;
-    const priceAddition = INGREDIENT_PRICES[type];
-    const oldPrice = this.state.totalPrice;
-    const newPrice = oldPrice - priceAddition;
-    this.setState({
-      totalPrice: newPrice,
-      ingreditents: updatedIngreditents,
-    });
-    this.updatePurchaseState(updatedIngreditents);
-  };
+
   purchaseHandler = () => {
     this.setState({ purchasing: true });
   };
@@ -90,20 +55,20 @@ class BurgetBuilder extends Component {
     for (let i in this.state.ingreditents) {
       queryParams.push(
         encodeURIComponent(i) +
-          "=" +
+          '=' +
           encodeURIComponent(this.state.ingreditents[i])
       );
     }
-    queryParams.push("price=" + this.state.totalPrice);
-    const queryString = queryParams.join("&");
+    queryParams.push('price=' + this.state.totalPrice);
+    const queryString = queryParams.join('&');
     this.props.history.push({
-      pathname: "/checkout",
-      search: "?" + queryString,
+      pathname: '/checkout',
+      search: '?' + queryString,
     });
   };
   render() {
     const disabledInfo = {
-      ...this.state.ingreditents,
+      ...this.props.ings,
     };
     for (let key in disabledInfo) {
       disabledInfo[key] = disabledInfo[key] <= 0;
@@ -118,14 +83,14 @@ class BurgetBuilder extends Component {
       <Spinner />
     );
 
-    if (this.state.ingreditents) {
+    if (this.props.ings) {
       burger = (
         <Aux>
-          <Burger ingreditents={this.state.ingreditents} />
+          <Burger ingreditents={this.props.ings} />
           <BurgerControl
-            price={this.state.totalPrice}
-            ingreditentAdded={this.addIngredientHandler}
-            ingreditentRemoved={this.removeIngredientHandler}
+            price={this.props.price}
+            ingreditentAdded={this.props.onIngredientAdded}
+            ingreditentRemoved={this.props.onIngredientRemove}
             purchasable={this.state.purchasable}
             disabled={disabledInfo}
             ordered={this.purchaseHandler}
@@ -134,10 +99,10 @@ class BurgetBuilder extends Component {
       );
       orderSummary = (
         <OrderSummary
-          ingredients={this.state.ingreditents}
+          ingredients={this.props.ings}
           purchaseCancelled={this.purchaseCancelHandler}
           purchaseContinue={this.purchaseContinueHandler}
-          price={this.state.totalPrice}
+          price={this.props.price}
         />
       );
     }
@@ -156,4 +121,26 @@ class BurgetBuilder extends Component {
   }
 }
 
-export default withErrorHandler(BurgetBuilder, axios);
+const mapStateToProps = (state) => {
+  return {
+    ings: state.ingredients,
+    price: state.totalPrice,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    onIngredientAdded: (ingName) =>
+      dispatch({ type: actionTypes.ADD_INGREDIENT, ingredientName: ingName }),
+    onIngredientRemove: (ingName) =>
+      dispatch({
+        type: actionTypes.REMOVE_INGREDIENT,
+        ingredientName: ingName,
+      }),
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withErrorHandler(BurgetBuilder, axios));
