@@ -13,19 +13,9 @@ import * as burgerBuilderActions from '../../store/actions/index';
 class BurgetBuilder extends Component {
   state = {
     purchasing: false,
-    loading: false,
-    error: null,
   };
   componentDidMount() {
-    /* axios
-      .get("/ingreditents.json")
-      .then((response) => {
-        this.setState({ ingreditents: response.data });
-      })
-      .catch((error) => {
-        this.setState({ error: true });
-      });
-      */
+    this.props.onInitIngredient();
   }
   updatePurchaseState(ingreditents) {
     const sum = Object.keys(ingreditents)
@@ -61,7 +51,7 @@ class BurgetBuilder extends Component {
     if (this.state.loading) {
       orderSummary = <Spinner />;
     }
-    let burger = this.state.error ? (
+    let burger = this.props.error ? (
       <p>Ingredients can't be loaded</p>
     ) : (
       <Spinner />
@@ -109,6 +99,7 @@ const mapStateToProps = (state) => {
   return {
     ings: state.ingredients,
     price: state.totalPrice,
+    error: state.error,
   };
 };
 
@@ -118,6 +109,7 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(burgerBuilderActions.addIngredient(ingName)),
     onIngredientRemove: (ingName) =>
       dispatch(burgerBuilderActions.removeIngredient(ingName)),
+    onInitIngredient: () => dispatch(burgerBuilderActions.initIngredients()),
   };
 };
 
