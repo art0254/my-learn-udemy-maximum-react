@@ -1,12 +1,12 @@
-import React from "react";
-import Logo from "../../Logo/Logo";
-import NavigationItems from "../NavigationItems/NavigationItems";
-import classes from "./SideDrawer.module.css";
-import Aux from "../../../hoc/Auxiliary/Auxiliary";
-import Backdrop from "../../UI/Backdrop/Backdrop";
+import React from 'react';
+import Logo from '../../Logo/Logo';
+import NavigationItems from '../NavigationItems/NavigationItems';
+import classes from './SideDrawer.module.css';
+import Aux from '../../../hoc/Auxiliary/Auxiliary';
+import Backdrop from '../../UI/Backdrop/Backdrop';
 const sideDrawer = (props) => {
   let attachedClasses = [classes.SideDrawer, classes.Close];
-  if(props.open){
+  if (props.open) {
     attachedClasses = [classes.SideDrawer, classes.Open];
   }
   return (
@@ -17,7 +17,7 @@ const sideDrawer = (props) => {
           <Logo />
         </div>
         <nav>
-          <NavigationItems />
+          <NavigationItems isAuthenticated={props.isAuth} />
         </nav>
       </div>
     </Aux>

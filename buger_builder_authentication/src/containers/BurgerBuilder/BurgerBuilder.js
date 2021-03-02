@@ -30,7 +30,11 @@ class BurgetBuilder extends Component {
   }
 
   purchaseHandler = () => {
-    this.setState({ purchasing: true });
+    if (this.props.isAuthenticated) {
+      this.setState({ purchasing: true });
+    } else {
+      this.props.history.push('/auth');
+    }
   };
   purchaseCancelHandler = () => {
     this.setState({ purchasing: false });
@@ -63,6 +67,7 @@ class BurgetBuilder extends Component {
         <Aux>
           <Burger ingreditents={this.props.ings} />
           <BurgerControl
+            isAuthenticated={this.props.isAuthenticated}
             price={this.props.price}
             ingreditentAdded={this.props.onIngredientAdded}
             ingreditentRemoved={this.props.onIngredientRemove}
@@ -101,6 +106,7 @@ const mapStateToProps = (state) => {
     ings: state.burgerBuilder.ingredients,
     price: state.burgerBuilder.totalPrice,
     error: state.burgerBuilder.error,
+    isAuthenticated: state.auth.token !== null,
   };
 };
 
