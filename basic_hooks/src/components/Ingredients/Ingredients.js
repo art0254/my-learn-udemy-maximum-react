@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import IngredientList from './IngredientList';
 import IngredientForm from './IngredientForm';
 import Search from './Search';
 
 const Ingredients = () => {
   const [userIngredients, setUserIngredients] = useState([]);
+
   const addIngredientHandler = (ingredient) => {
     fetch(
       'https://react-hook-max-52acc-default-rtdb.firebaseio.com/ingredients.json',
@@ -27,27 +28,34 @@ const Ingredients = () => {
       });
   };
 
-  fetch(
-    'https://react-hook-max-52acc-default-rtdb.firebaseio.com/ingredients.json'
-  )
-    .then((response) => response.json())
-    .then((responseData) => {
-      const lodedIngredients = [];
-      for (const key in responseData) {
-        lodedIngredients.push({
-          id: key,
-          title: responseData[key].title,
-          amount: responseData[key].amount,
-        });
-      }
-      setUserIngredients(lodedIngredients);
-    });
+  const filteredIngredientsHandler = useCallback((filteredIngredients) => {
+    setUserIngredients(filteredIngredients);
+  }, []);
+
+  // useEffect(() => {
+  //   fetch(
+  //     'https://react-hook-max-52acc-default-rtdb.firebaseio.com/ingredients.json'
+  //   )
+  //     .then((response) => response.json())
+  //     .then((responseData) => {
+  //       const lodedIngredients = [];
+  //       for (const key in responseData) {
+  //         lodedIngredients.push({
+  //           id: key,
+  //           title: responseData[key].title,
+  //           amount: responseData[key].amount,
+  //         });
+  //       }
+  //       setUserIngredients(lodedIngredients);
+  //     });
+  // }, []);
+
   return (
     <div className="App">
       <IngredientForm onAddIngredient={addIngredientHandler} />
 
       <section>
-        <Search />
+        <Search onLoadIngredients={filteredIngredientsHandler} />
         <IngredientList ingredients={userIngredients} onRemoveItem={() => {}} />
       </section>
     </div>
