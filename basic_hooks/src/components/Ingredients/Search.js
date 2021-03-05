@@ -35,7 +35,7 @@ const Search = React.memo((props) => {
     return () => {
       clearTimeout(timer);
     };
-  }, [enteredFilter, onLoadIngredients]);
+  }, [enteredFilter, onLoadIngredients, inputRef]);
 
   return (
     <section className="search">
